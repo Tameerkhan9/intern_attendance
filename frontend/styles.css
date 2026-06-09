@@ -1,0 +1,811 @@
+:root {
+  --bg-top: #f3efe7;
+  --bg-bottom: #e6ddd0;
+  --panel: rgba(252, 248, 242, 0.86);
+  --panel-strong: rgba(255, 252, 247, 0.96);
+  --ink: #16202b;
+  --muted: #667085;
+  --line: rgba(79, 58, 33, 0.12);
+  --line-strong: rgba(79, 58, 33, 0.18);
+  --accent: #0f766e;
+  --accent-deep: #0c5f59;
+  --button-start: #2f9f93;
+  --button-end: #23867d;
+  --gold: #b7791f;
+  --gold-soft: rgba(183, 121, 31, 0.14);
+  --slate-soft: rgba(71, 85, 105, 0.1);
+  --danger-soft: rgba(153, 27, 27, 0.1);
+  --danger: #991b1b;
+  --success: #146c43;
+  --shadow: 0 32px 80px rgba(36, 28, 21, 0.12);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: "Outfit", sans-serif;
+  color: var(--ink);
+  background:
+    radial-gradient(circle at top left, rgba(15, 118, 110, 0.12), transparent 24%),
+    radial-gradient(circle at 80% 18%, rgba(183, 121, 31, 0.12), transparent 22%),
+    linear-gradient(180deg, var(--bg-top) 0%, var(--bg-bottom) 100%);
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0));
+  pointer-events: none;
+}
+
+.app-shell {
+  position: relative;
+  z-index: 1;
+  width: min(1320px, calc(100% - 2rem));
+  margin: 0 auto;
+  padding: 1.5rem 0 2.5rem;
+}
+
+.auth-panel,
+.portal-panel,
+.intern-panel {
+  background: var(--panel);
+  border: 1px solid rgba(255, 255, 255, 0.62);
+  border-radius: 30px;
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(18px);
+}
+
+.hidden {
+  display: none !important;
+}
+
+.auth-panel {
+  display: block;
+  max-width: 520px;
+  margin: 2.5rem auto;
+  padding: 1.25rem;
+}
+
+.portal-panel,
+.intern-panel {
+  padding: 1.1rem;
+}
+
+.auth-form,
+.workflow-card,
+.stat-tile,
+.report-card,
+.intern-status-card {
+  background: var(--panel-strong);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  box-shadow: 0 20px 50px rgba(60, 45, 31, 0.08);
+  border-radius: 24px;
+}
+
+.auth-form,
+.workflow-card,
+.intern-status-card {
+  padding: 1rem;
+}
+
+.eyebrow,
+.section-kicker,
+.overview-label,
+.date-label {
+  margin: 0 0 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--accent-deep);
+}
+
+h1,
+h2 {
+  margin: 0;
+  color: var(--ink);
+}
+
+h1 {
+  font-size: clamp(2rem, 3vw, 2.7rem);
+  line-height: 1.02;
+}
+
+h2 {
+  font-size: 1.45rem;
+}
+
+.panel-subtitle,
+.credential-card p,
+.stat-tile p,
+.report-card p,
+.session-label {
+  margin: 0.55rem 0 0;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.credential-card {
+  margin-top: 1rem;
+  padding: 1rem 1.05rem;
+  border-radius: 18px;
+  background: rgba(15, 118, 110, 0.05);
+  border: 1px solid rgba(15, 118, 110, 0.1);
+}
+
+.compact-card p {
+  margin: 0.2rem 0;
+}
+
+.credential-card strong {
+  display: block;
+  margin-bottom: 0.35rem;
+}
+
+.panel-header,
+.section-heading,
+.toolbar,
+.reports-toolbar,
+.password-form,
+.recovery-form,
+.intern-form,
+.admin-form,
+.table-head,
+.intern-row,
+.row-actions,
+.admin-actions,
+.stats-strip,
+.report-grid,
+.intern-actions {
+  position: relative;
+}
+
+.panel-header {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 1rem;
+  align-items: start;
+  margin-bottom: 1.25rem;
+}
+
+.header-actions {
+  display: grid;
+  gap: 0.65rem;
+  justify-items: end;
+}
+
+.section-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.stats-strip,
+.report-grid {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.stats-strip {
+  grid-template-columns: 1.15fr repeat(4, 1fr);
+  margin-bottom: 0.75rem;
+}
+
+.report-grid {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.stat-tile,
+.report-card {
+  padding: 0.8rem 0.95rem;
+  border-radius: 18px;
+}
+
+.stat-tile strong,
+.report-card strong,
+.intern-current-status {
+  display: block;
+  font-size: 1.45rem;
+  font-weight: 800;
+  color: var(--ink);
+}
+
+.workflow-card {
+  margin-bottom: 0.75rem;
+  border-radius: 20px;
+}
+
+.ghost-button,
+.secondary-button,
+.save-attendance-button,
+.undo-remove-button,
+.auth-form button,
+.admin-form button,
+.intern-form button,
+.row-actions button,
+.intern-actions button {
+  border: 0;
+  border-radius: 16px;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease, color 180ms ease, opacity 180ms ease;
+}
+
+.ghost-button,
+.secondary-button {
+  padding: 0.95rem 1.1rem;
+  background: rgba(15, 118, 110, 0.08);
+  color: var(--accent-deep);
+}
+
+.field,
+.search-box {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.field span,
+.search-box span {
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: #344054;
+}
+
+.field input,
+.field select,
+.search-box input {
+  width: 100%;
+  padding: 1rem;
+  border-radius: 16px;
+  border: 1px solid var(--line);
+  background: #fffdf9;
+  color: var(--ink);
+  font: inherit;
+  outline: none;
+  transition: border-color 180ms ease, box-shadow 180ms ease;
+}
+
+.password-control {
+  position: relative;
+  display: block;
+}
+
+.password-control input {
+  padding-right: 2.8rem;
+}
+
+.password-toggle {
+  position: absolute;
+  top: 50%;
+  right: 0.85rem;
+  transform: translateY(-50%);
+  width: 1.35rem;
+  height: 1.35rem;
+  border: 0;
+  border-radius: 999px;
+  background: transparent !important;
+  color: #667085 !important;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  box-shadow: none !important;
+}
+
+.password-form .password-toggle,
+.auth-form .password-toggle {
+  min-width: 0;
+  padding: 0 !important;
+  background: transparent !important;
+  color: #111827 !important;
+  box-shadow: none !important;
+}
+
+.password-toggle svg {
+  width: 1rem;
+  height: 1rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  pointer-events: none;
+}
+
+.field input:focus,
+.field select:focus,
+.search-box input:focus {
+  border-color: rgba(15, 118, 110, 0.45);
+  box-shadow: 0 0 0 4px rgba(15, 118, 110, 0.1);
+}
+
+.auth-form,
+.auth-form form {
+  display: grid;
+  gap: 1rem;
+}
+
+.auth-form button,
+.admin-form button,
+.password-form button,
+.recovery-form button,
+.intern-form button,
+.save-attendance-button {
+  padding: 1rem 1.2rem;
+  background: linear-gradient(135deg, var(--button-start) 0%, var(--button-end) 100%);
+  color: white;
+  box-shadow: 0 14px 28px rgba(47, 159, 147, 0.18);
+}
+
+.admin-form {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.95rem;
+}
+
+.password-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr 140px auto auto;
+  gap: 0.95rem;
+  align-items: end;
+}
+
+.auth-link-button {
+  border: 0;
+  background: transparent;
+  color: var(--accent-deep);
+  cursor: pointer;
+  font: inherit;
+  font-weight: 700;
+  padding: 0.15rem 0;
+  text-align: center;
+}
+
+.recovery-form {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.reports-toolbar {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) auto;
+  gap: 0.95rem;
+  margin-bottom: 1rem;
+  align-items: end;
+}
+
+.toolbar {
+  display: grid;
+  grid-template-columns: 1fr 170px 150px 190px auto auto;
+  gap: 1rem;
+  align-items: end;
+  margin-bottom: 1rem;
+}
+
+.date-chip {
+  min-width: 180px;
+  padding: 0.9rem 1rem;
+  border-radius: 18px;
+  border: 1px solid var(--line);
+  background: rgba(15, 118, 110, 0.05);
+}
+
+.report-chip {
+  margin-bottom: 1rem;
+}
+
+.filter-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin-bottom: 1rem;
+}
+
+.detail-visible-count {
+  margin: 0 0 1rem;
+  color: var(--muted);
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.filter-chip,
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  min-width: 84px;
+  padding: 0.42rem 0.76rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.filter-chip {
+  background: rgba(15, 118, 110, 0.08);
+  color: var(--accent-deep);
+}
+
+.date-selector input {
+  min-height: 3.45rem;
+}
+
+.today-label {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.form-message {
+  min-height: 1.5rem;
+  margin: 0.85rem 0 0;
+  font-size: 0.94rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.message-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.undo-remove-button {
+  margin-top: 0.85rem;
+  padding: 0.72rem 0.9rem;
+  background: var(--danger-soft);
+  color: var(--danger);
+  white-space: nowrap;
+}
+
+.form-message.is-success {
+  color: var(--success);
+}
+
+.form-message.is-error {
+  color: var(--danger);
+}
+
+.table-card {
+  border-radius: 24px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.table-head,
+.intern-row {
+  display: grid;
+  gap: 1rem;
+  align-items: center;
+}
+
+.admin-table-head,
+.admin-row {
+  grid-template-columns: 1.3fr 0.95fr 0.8fr 1.55fr auto;
+}
+
+.report-table-head,
+.report-row {
+  grid-template-columns: 1.35fr repeat(6, minmax(90px, 1fr));
+}
+
+.detailed-report-table-head,
+.detailed-report-row {
+  grid-template-columns: 1.15fr 1fr 0.95fr 0.8fr 0.8fr 0.9fr;
+}
+
+.report-table-head span,
+.report-row .table-cell,
+.report-row > div {
+  text-align: center;
+}
+
+.report-table-head span:first-child,
+.report-row .table-cell:first-child,
+.report-row > div:first-child {
+  text-align: left;
+}
+
+.table-head {
+  padding: 1rem 1.2rem;
+  background: rgba(247, 243, 236, 0.92);
+  border-bottom: 1px solid rgba(79, 58, 33, 0.06);
+  color: #667085;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.11em;
+}
+
+.table-body {
+  display: grid;
+}
+
+.intern-row {
+  padding: 1rem 1.2rem;
+  background: rgba(255, 255, 255, 0.56);
+  border-top: 1px solid rgba(79, 58, 33, 0.06);
+}
+
+.intern-row.has-pending-change {
+  background: rgba(15, 118, 110, 0.08);
+}
+
+.intern-identity {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.intern-avatar {
+  width: 2.7rem;
+  height: 2.7rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 16px;
+  background: linear-gradient(135deg, rgba(15, 118, 110, 0.16), rgba(183, 121, 31, 0.18));
+  color: var(--ink);
+  font-weight: 800;
+}
+
+.intern-name {
+  font-size: 1rem;
+}
+
+.intern-team,
+.intern-username,
+.empty-state {
+  color: var(--muted);
+}
+
+.table-cell {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.mobile-label {
+  display: none;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #8b95a7;
+}
+
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  min-width: 84px;
+  padding: 0.42rem 0.76rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.status-present,
+.status-present-button {
+  background: rgba(22, 163, 74, 0.16) !important;
+  color: #15803d !important;
+}
+
+.status-late,
+.status-late-button {
+  background: var(--gold-soft) !important;
+  color: var(--gold) !important;
+}
+
+.status-absent,
+.status-absent-button {
+  background: rgba(220, 38, 38, 0.14) !important;
+  color: #b91c1c !important;
+}
+
+.status-leave,
+.status-leave-button {
+  background: rgba(161, 98, 7, 0.14) !important;
+  color: #92400e !important;
+}
+
+.status-half-day {
+  background: rgba(37, 99, 235, 0.14) !important;
+  color: #1d4ed8 !important;
+}
+
+.row-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  flex-wrap: nowrap;
+}
+
+.admin-actions {
+  display: grid;
+}
+
+.row-actions button,
+.admin-actions button,
+.intern-actions button {
+  padding: 0.72rem 0.72rem;
+  background: rgba(255, 255, 255, 0.88);
+  color: var(--ink);
+  border: 1px solid transparent;
+  font-size: 0.92rem;
+  white-space: nowrap;
+}
+
+.delete-button {
+  background: var(--danger-soft) !important;
+  color: var(--danger) !important;
+}
+
+.status-action.is-hidden {
+  display: none;
+}
+
+.admin-actions .delete-button {
+  min-width: 88px;
+}
+
+.intern-status-card {
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.intern-status-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: center;
+  margin: 1rem 0 1.25rem;
+}
+
+.intern-actions {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.empty-state {
+  margin: 0;
+  padding: 2.4rem 1rem;
+  text-align: center;
+  font-size: 1rem;
+}
+
+button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 22px rgba(26, 26, 26, 0.08);
+}
+
+.password-toggle:hover {
+  transform: translateY(-50%);
+  box-shadow: none;
+  background: rgba(15, 118, 110, 0.06) !important;
+}
+
+button:disabled {
+  opacity: 0.42;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
+@media (max-width: 1100px) {
+  .report-grid,
+  .admin-form {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .stats-strip {
+    grid-template-columns: repeat(5, minmax(8.5rem, 1fr));
+    overflow-x: auto;
+    padding-bottom: 0.25rem;
+  }
+}
+
+@media (max-width: 900px) {
+  .panel-header,
+  .reports-toolbar,
+  .password-form,
+  .toolbar,
+  .report-grid,
+  .admin-form,
+  .intern-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .date-chip {
+    min-width: 0;
+  }
+
+  .table-head {
+    display: none;
+  }
+
+  .table-card {
+    background: transparent;
+    border: 0;
+  }
+
+  .table-body {
+    gap: 0.9rem;
+  }
+
+  .intern-row {
+    grid-template-columns: 1fr;
+    padding: 1rem;
+    border: 1px solid var(--line-strong);
+    border-radius: 22px;
+    background: rgba(255, 255, 255, 0.82);
+  }
+
+  .mobile-label {
+    display: block;
+  }
+
+  .row-actions {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .message-row {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .undo-remove-button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 560px) {
+  .app-shell {
+    width: min(100%, calc(100% - 1rem));
+    padding-top: 0.75rem;
+  }
+
+  .auth-panel,
+  .portal-panel,
+  .intern-panel,
+  .auth-copy,
+  .auth-form,
+  .workflow-card,
+  .stat-tile,
+  .report-card,
+  .intern-status-card {
+    border-radius: 22px;
+  }
+
+  .auth-panel,
+  .portal-panel,
+  .intern-panel,
+  .auth-copy,
+  .auth-form,
+  .workflow-card,
+  .stat-tile,
+  .report-card,
+  .intern-status-card {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .row-actions,
+  .intern-actions {
+    grid-template-columns: 1fr;
+  }
+}
