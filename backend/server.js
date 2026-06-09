@@ -40,8 +40,15 @@ loadEnvFile(ENV_PATH);
 const app = express();
 const PORT = process.env.PORT || 4000;
 const FRONTEND_DIR = path.join(ROOT_DIR, "frontend");
-const IS_VERCEL = Boolean(process.env.VERCEL);
-const DATA_DIR = process.env.DATA_DIR || (IS_VERCEL
+const DATABASE_URL = process.env.DATABASE_URL || process.env.POSTGRES_URL || process.env.SUPABASE_DB_URL || "";
+const IS_SERVERLESS = Boolean(
+  process.env.VERCEL
+  || process.env.VERCEL_ENV
+  || process.env.VERCEL_URL
+  || process.env.AWS_REGION
+  || process.env.LAMBDA_TASK_ROOT
+);
+const DATA_DIR = process.env.DATA_DIR || ((IS_SERVERLESS || DATABASE_URL)
   ? path.join("/tmp", "inter_attendance_data")
   : path.join(ROOT_DIR, "data"));
 const DB_PATH = path.join(DATA_DIR, "attendance.db");
@@ -53,7 +60,9 @@ const PASSWORD_CODE_EMAIL = process.env.PASSWORD_CODE_EMAIL || "networkcorvitpwr
 const GMAIL_SENDER = process.env.GMAIL_SENDER || "";
 const GMAIL_APP_PASSWORD = process.env.GMAIL_APP_PASSWORD || "";
 
-fs.mkdirSync(DATA_DIR, { recursive: true });
+if (!DATABASE_URL) {
+  fs.mkdirSync(DATA_DIR, { recursive: true });
+}
 
 const hashPassword = (password) => crypto
   .createHash("sha256")
