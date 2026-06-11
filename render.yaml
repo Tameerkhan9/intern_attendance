@@ -10,6 +10,10 @@ services:
         value: 22
       - key: PASSWORD_CODE_EMAIL
         sync: false
+      - key: EMAIL_FROM
+        sync: false
+      - key: RESEND_API_KEY
+        sync: false
       - key: GMAIL_SENDER
         sync: false
       - key: GMAIL_APP_PASSWORD

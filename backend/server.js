@@ -61,6 +61,8 @@ const ADMIN_PASSWORD = "admin123";
 const PASSWORD_CODE_EMAIL = process.env.PASSWORD_CODE_EMAIL || "networkcorvitpwr@gmail.com";
 const GMAIL_SENDER = process.env.GMAIL_SENDER || "";
 const GMAIL_APP_PASSWORD = (process.env.GMAIL_APP_PASSWORD || "").replace(/\s+/g, "");
+const RESEND_API_KEY = process.env.RESEND_API_KEY || "";
+const EMAIL_FROM = process.env.EMAIL_FROM || GMAIL_SENDER || "";
 
 if (!DATABASE_URL) {
   fs.mkdirSync(DATA_DIR, { recursive: true });
@@ -144,7 +146,39 @@ const smtpCommand = async (socket, command, expectedCodes) => {
   }
 };
 
+const sendRecoveryEmailWithResend = async (subject, body) => {
+  if (!RESEND_API_KEY || !EMAIL_FROM) {
+    throw new Error("Resend email sender is not configured.");
+  }
+
+  const response = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${RESEND_API_KEY}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      from: EMAIL_FROM,
+      to: [PASSWORD_CODE_EMAIL],
+      subject,
+      text: body
+    })
+  });
+
+  const payload = await response.json().catch(() => null);
+
+  if (!response.ok) {
+    const resendMessage = payload?.message || payload?.error || `HTTP ${response.status}`;
+    throw new Error(`Resend API error: ${resendMessage}`);
+  }
+};
+
 const sendRecoveryEmail = async (subject, body) => {
+  if (RESEND_API_KEY) {
+    await sendRecoveryEmailWithResend(subject, body);
+    return;
+  }
+
   if (!GMAIL_SENDER || !GMAIL_APP_PASSWORD) {
     throw new Error("Gmail sender is not configured.");
   }
@@ -191,7 +225,10 @@ const sendUsernameEmail = () => sendRecoveryEmail(
   `Your attendance portal username is ${ADMIN_USERNAME}.`
 );
 
-const isPasswordResetConfigured = () => Boolean(GMAIL_SENDER && GMAIL_APP_PASSWORD);
+const isPasswordResetConfigured = () => (
+  Boolean(RESEND_API_KEY && EMAIL_FROM)
+  || Boolean(GMAIL_SENDER && GMAIL_APP_PASSWORD)
+);
 
 const buildSummary = (records) => records.reduce((summary, record) => {
   summary.totalInterns += 1;

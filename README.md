@@ -76,6 +76,7 @@ Hard refresh the browser with `Ctrl + F5` so the latest frontend script loads.
 
 ### Required environment variables
 
+- `RESEND_API_KEY` and `EMAIL_FROM` for Render-friendly email delivery over HTTPS
 - `GMAIL_SENDER`
 - `GMAIL_APP_PASSWORD`
 - `PASSWORD_CODE_EMAIL`
