@@ -17,16 +17,20 @@ A lightweight attendance portal for manager-controlled intern attendance with pe
 - Combine morning and evening attendance into a daily final result for reports
 - Calculate `Half Day` when one session is attended and the other is not
 - View intern-wise detailed report rows with:
-  `Name`, `Department`, `Date`, `Morning`, `Evening`, `Final Status`
+  - `Name`
+  - `Department`
+  - `Date`
+  - `Morning`
+  - `Evening`
+  - `Final Status`
 - Filter detailed reports by status, name, and department
 - Sort detailed reports and export filtered detailed CSV
 
 ## Run
 
 1. Install dependencies with `npm.cmd install`
-2. Optional: copy `.env.example` to `.env` and fill in your Gmail settings for password reset
-3. Start the server with `npm.cmd start`
-4. Open `http://localhost:4000`
+2. Start the server with `npm.cmd start`
+3. Open `http://localhost:4000`
 
 ## Default credentials
 
@@ -35,11 +39,10 @@ A lightweight attendance portal for manager-controlled intern attendance with pe
 
 ## Files
 
-- `frontend/index.html` - portal layout
-- `frontend/styles.css` - responsive styling
-- `frontend/app.js` - frontend logic, login flow, and manager dashboard
-- `backend/server.js` - Express API and SQLite persistence
-- `backend/start-server.bat` - Windows helper to start the app
+- `index.html` - portal layout
+- `styles.css` - responsive styling
+- `app.js` - frontend logic, login flow, and manager dashboard
+- `server.js` - Express API and SQLite persistence
 - `data/attendance.db` - generated database file
 
 ## Reporting rules
@@ -53,34 +56,30 @@ A lightweight attendance portal for manager-controlled intern attendance with pe
 
 ## Deployment note
 
-- After updating code, restart `node backend/server.js`
-- Hard refresh the browser with `Ctrl + F5` so the latest frontend script loads
+After updating code, restart `node server.js`.
 
-## Local email setup
+Hard refresh the browser with `Ctrl + F5` so the latest frontend script loads.
 
-Create a `.env` file in the project root with:
+## Render deploy
 
-`DATABASE_URL=your_supabase_postgres_connection_string`
-`GMAIL_SENDER=networkcorvitpwr@gmail.com`
-`GMAIL_APP_PASSWORD=your_google_app_password`
-`PASSWORD_CODE_EMAIL=networkcorvitpwr@gmail.com`
+- Create a `Web Service` on Render
+- Connect this GitHub repo
+- Render can use `render.yaml` automatically
+- The app stores SQLite data at `/var/data/attendance.db` on Render
+- Attach the persistent disk at `/var/data`
 
-Notes:
-- Leave `DATABASE_URL` empty for local SQLite mode
-- Set `DATABASE_URL` in production to use Supabase/Postgres instead of SQLite
-- `GMAIL_APP_PASSWORD` must be a Google App Password, not your normal Gmail password
-- `.env` is ignored by git and stays local on your machine
+### Render settings
 
-## Vercel production setup
+- Build Command: `npm install`
+- Start Command: `npm start`
+- Runtime: `Node`
 
-Set these environment variables in Vercel:
+### Required environment variables
 
-- `DATABASE_URL` = your Supabase Postgres connection string
-- `GMAIL_SENDER` = your Gmail sender address
-- `GMAIL_APP_PASSWORD` = your Google App Password
-- `PASSWORD_CODE_EMAIL` = email address that receives reset codes
+- `GMAIL_SENDER`
+- `GMAIL_APP_PASSWORD`
+- `PASSWORD_CODE_EMAIL`
 
-Production notes:
-- Local SQLite is kept for local development
-- Vercel should use `DATABASE_URL` so attendance, users, sessions, and reset codes are persistent
-- Frontend source lives in `frontend/` and is synced to `public/` during build for Vercel
+### Important
+
+- Use a paid Render plan that supports a persistent disk if you want SQLite data to survive redeploys and restarts.

@@ -2,12 +2,10 @@
   "name": "inter_attendence_portal",
   "version": "1.0.0",
   "description": "A lightweight attendance portal for tracking intern check-ins and check-outs.",
-  "main": "backend/server.js",
+  "main": "server.js",
   "scripts": {
-    "sync:frontend": "node scripts/sync-frontend.js",
-    "build": "npm run sync:frontend",
-    "start": "npm run sync:frontend && node backend/server.js",
-    "dev": "npm run sync:frontend && node backend/server.js",
+    "start": "node server.js",
+    "dev": "node server.js",
     "test": "echo \"No tests configured\""
   },
   "keywords": [],

@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Intern Attendance Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css?v=20260607-eye">
+</head>
+<body>
+  <main class="app-shell">
+    <section id="authView" class="auth-panel">
+      <form id="loginForm" class="auth-form">
+        <div class="section-heading">
+          <div>
+            <p class="section-kicker">Sign in</p>
+            <h1>Intern Attendance Portal</h1>
+            <p class="panel-subtitle">Manager login for attendance tracking.</p>
+          </div>
+        </div>
+        <label class="field">
+          <span>Username</span>
+          <input id="loginUsername" type="text" placeholder="Enter username" required>
+        </label>
+        <label class="field">
+          <span>Password</span>
+          <span class="password-control">
+            <input id="loginPassword" type="password" placeholder="Enter password" required>
+            <button class="password-toggle" type="button" data-password-toggle="loginPassword" aria-label="Show login password">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M2 12s3.5-6 10-6c2.1 0 3.8 0.6 5.2 1.4"></path>
+                <path d="M22 12s-3.5 6-10 6c-2.1 0-3.8-0.6-5.2-1.4"></path>
+                <path d="M9.8 9.8A3 3 0 0 0 14.2 14.2"></path>
+                <path d="M3 21L21 3"></path>
+              </svg>
+            </button>
+          </span>
+        </label>
+        <button type="submit">Sign in</button>
+        <button id="showPasswordResetButton" class="auth-link-button" type="button">Forgot password?</button>
+        <p id="loginMessage" class="form-message" aria-live="polite"></p>
+      </form>
+
+      <section id="passwordResetView" class="auth-form hidden">
+        <div class="section-heading">
+          <div>
+            <p class="section-kicker">Account recovery</p>
+            <h1>Reset password</h1>
+            <p class="panel-subtitle">Send a code to your Gmail, then set a new password.</p>
+          </div>
+        </div>
+        <form id="passwordForm" class="recovery-form">
+          <label class="field">
+            <span>New password</span>
+            <span class="password-control">
+              <input id="newPassword" type="password" autocomplete="new-password" minlength="8" required>
+              <button class="password-toggle" type="button" data-password-toggle="newPassword" aria-label="Show new password">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M2 12s3.5-6 10-6c2.1 0 3.8 0.6 5.2 1.4"></path>
+                  <path d="M22 12s-3.5 6-10 6c-2.1 0-3.8-0.6-5.2-1.4"></path>
+                  <path d="M9.8 9.8A3 3 0 0 0 14.2 14.2"></path>
+                  <path d="M3 21L21 3"></path>
+                </svg>
+              </button>
+            </span>
+          </label>
+          <label class="field">
+            <span>Gmail code</span>
+            <input id="passwordCode" type="text" inputmode="numeric" maxlength="6" placeholder="6-digit code" required>
+          </label>
+          <button id="sendPasswordCodeButton" class="secondary-button" type="button">Send reset code</button>
+          <button type="submit">Reset password</button>
+        </form>
+        <button id="backToLoginButton" class="auth-link-button" type="button">Back to login</button>
+        <p id="passwordMessage" class="form-message" aria-live="polite"></p>
+      </section>
+    </section>
+
+    <section id="adminView" class="portal-panel hidden">
+      <div class="panel-header">
+        <div>
+          <p class="eyebrow">Admin Dashboard</p>
+          <h1>Intern Attendance Portal</h1>
+          <p class="panel-subtitle">Manage intern attendance in one place.</p>
+        </div>
+        <div class="header-actions">
+          <p id="sessionLabel" class="session-label"></p>
+          <button id="logoutButton" class="ghost-button" type="button">Logout</button>
+        </div>
+      </div>
+
+      <section class="stats-strip">
+        <article class="stat-tile">
+          <span class="overview-label">Total interns</span>
+          <strong id="totalCount">0</strong>
+          <p>Current roster</p>
+        </article>
+        <article class="stat-tile">
+          <span class="overview-label">Present</span>
+          <strong id="presentCount">0</strong>
+          <p>Marked present</p>
+        </article>
+        <article class="stat-tile">
+          <span class="overview-label">Late</span>
+          <strong id="lateCount">0</strong>
+          <p>Marked late</p>
+        </article>
+        <article class="stat-tile">
+          <span class="overview-label">Absent</span>
+          <strong id="absentCount">0</strong>
+          <p>Marked absent</p>
+        </article>
+        <article class="stat-tile">
+          <span class="overview-label">Leave</span>
+          <strong id="leaveCount">0</strong>
+          <p>Approved leave</p>
+        </article>
+      </section>
+
+      <section class="workflow-card">
+        <div class="section-heading">
+          <div>
+            <p class="section-kicker">Intern management</p>
+            <h2>Add intern</h2>
+          </div>
+        </div>
+
+        <form id="internForm" class="admin-form">
+          <label class="field">
+            <span>Full name</span>
+            <input id="internName" name="name" type="text" placeholder="Enter intern full name" required>
+          </label>
+          <label class="field">
+            <span>Department</span>
+            <input id="internTeam" name="team" type="text" placeholder="Engineering, Design, Operations..." required>
+          </label>
+          <button type="submit">Add intern</button>
+        </form>
+        <div class="message-row">
+          <p id="formMessage" class="form-message" aria-live="polite"></p>
+          <button id="undoRemoveButton" class="undo-remove-button hidden" type="button">Undo Remove</button>
+        </div>
+      </section>
+
+      <section class="workflow-card">
+        <div class="toolbar">
+          <label class="search-box">
+            <span>Search directory</span>
+            <input id="searchInput" type="search" placeholder="Search by name or department">
+          </label>
+          <label class="field date-selector">
+            <span>Attendance date</span>
+            <input id="attendanceDate" type="date">
+          </label>
+          <label class="field session-selector">
+            <span>Session</span>
+            <select id="attendanceSession">
+              <option value="morning">Morning</option>
+              <option value="evening">Evening</option>
+            </select>
+          </label>
+          <div class="date-chip">
+            <span class="date-label">Viewing</span>
+            <p id="todayLabel" class="today-label"></p>
+          </div>
+          <button id="exportCsvButton" class="secondary-button" type="button">Export CSV</button>
+          <button id="saveAttendanceButton" class="save-attendance-button" type="button" disabled>Save Attendance</button>
+        </div>
+
+        <section class="table-card">
+          <div class="table-head admin-table-head">
+            <span>Intern</span>
+            <span>Department</span>
+            <span>Selected session</span>
+            <span>Attendance</span>
+            <span>Manage</span>
+          </div>
+          <div id="internList" class="table-body"></div>
+        </section>
+      </section>
+
+      <section class="workflow-card">
+        <div class="section-heading">
+          <div>
+            <p class="section-kicker">Attendance reports</p>
+            <h2>View records</h2>
+          </div>
+        </div>
+        <div class="reports-toolbar">
+          <label class="field">
+            <span>Report type</span>
+            <select id="reportPeriod">
+              <option value="daily">Daily</option>
+              <option value="weekly">Weekly</option>
+              <option value="monthly">Monthly</option>
+              <option value="custom">Date to date</option>
+            </select>
+          </label>
+          <label id="reportDateField" class="field">
+            <span id="reportDateLabel">Base date</span>
+            <input id="reportDate" type="date">
+          </label>
+          <label id="reportEndField" class="field hidden">
+            <span>To date</span>
+            <input id="reportEndDate" type="date">
+          </label>
+          <button id="refreshReportButton" class="secondary-button" type="button">Refresh Report</button>
+        </div>
+
+        <div class="reports-toolbar detailed-filters-toolbar">
+          <label class="field">
+            <span>Final status</span>
+            <select id="detailStatusFilter">
+              <option value="all">All statuses</option>
+              <option value="Present">Present</option>
+              <option value="Late">Late</option>
+              <option value="Leave">Leave</option>
+              <option value="Half Day">Half Day</option>
+              <option value="Absent">Absent</option>
+            </select>
+          </label>
+          <label class="field">
+            <span>Search name</span>
+            <input id="detailNameFilter" type="search" placeholder="Search intern name">
+          </label>
+          <label class="field">
+            <span>Department</span>
+            <input id="detailDepartmentFilter" type="search" placeholder="Search department">
+          </label>
+          <label class="field">
+            <span>Sort by</span>
+            <select id="detailSortBy">
+              <option value="date-desc">Date newest</option>
+              <option value="date-asc">Date oldest</option>
+              <option value="name-asc">Name A-Z</option>
+              <option value="name-desc">Name Z-A</option>
+              <option value="status-asc">Status A-Z</option>
+            </select>
+          </label>
+          <button id="clearDetailedFiltersButton" class="secondary-button" type="button">Clear Filters</button>
+          <button id="exportDetailedCsvButton" class="secondary-button" type="button">Export Detailed CSV</button>
+        </div>
+
+        <div class="date-chip report-chip">
+          <span class="date-label">Showing</span>
+          <p id="reportLabel" class="today-label">-</p>
+        </div>
+        <div id="detailFilterChips" class="filter-chips hidden"></div>
+        <p id="detailVisibleCount" class="detail-visible-count">Showing 0 rows</p>
+
+        <section class="report-grid">
+          <article class="report-card">
+            <span class="overview-label">Total records</span>
+            <strong id="reportTotal">0</strong>
+            <p>Attendance entries in range</p>
+          </article>
+          <article class="report-card">
+            <span class="overview-label">Present</span>
+            <strong id="reportPresent">0</strong>
+            <p>Marked present</p>
+          </article>
+          <article class="report-card">
+            <span class="overview-label">Late</span>
+            <strong id="reportLate">0</strong>
+            <p>Marked late</p>
+          </article>
+          <article class="report-card">
+            <span class="overview-label">Leave</span>
+            <strong id="reportLeave">0</strong>
+            <p>Approved leave</p>
+          </article>
+          <article class="report-card">
+            <span class="overview-label">Half Day</span>
+            <strong id="reportHalfDay">0</strong>
+            <p>Morning and evening split</p>
+          </article>
+          <article class="report-card">
+            <span class="overview-label">Absent</span>
+            <strong id="reportAbsent">0</strong>
+            <p>Marked absent</p>
+          </article>
+          <article class="report-card">
+            <span class="overview-label">Active interns</span>
+            <strong id="reportActiveInterns">0</strong>
+            <p>Current roster size</p>
+          </article>
+        </section>
+
+        <section class="table-card report-table-card">
+          <div class="table-head report-table-head">
+            <span>Date</span>
+            <span>Total</span>
+            <span>Present</span>
+            <span>Late</span>
+            <span>Leave</span>
+            <span>Half Day</span>
+            <span>Absent</span>
+          </div>
+          <div id="reportRecords" class="table-body"></div>
+        </section>
+
+        <section class="table-card report-table-card">
+          <div class="table-head detailed-report-table-head">
+            <span>Name</span>
+            <span>Department</span>
+            <span>Date</span>
+            <span>Morning</span>
+            <span>Evening</span>
+            <span>Final Status</span>
+          </div>
+          <div id="detailedReportRecords" class="table-body"></div>
+        </section>
+      </section>
+    </section>
+
+  </main>
+
+  <template id="internRowTemplate">
+    <article class="intern-row admin-row">
+      <div class="intern-identity">
+        <span class="intern-avatar"></span>
+        <div class="identity-copy">
+          <strong class="intern-name"></strong>
+        </div>
+      </div>
+      <div class="table-cell">
+        <span class="mobile-label">Department</span>
+        <span class="intern-team"></span>
+      </div>
+      <div class="table-cell">
+        <span class="mobile-label">Status</span>
+        <span class="status-pill"></span>
+      </div>
+      <div class="row-actions">
+        <button class="status-action status-present-button" type="button">Present</button>
+        <button class="status-action status-absent-button" type="button">Absent</button>
+        <button class="status-action status-late-button" type="button">Late</button>
+        <button class="status-action status-leave-button" type="button">Leave</button>
+      </div>
+      <div class="admin-actions">
+        <button class="delete-button" type="button">Remove</button>
+      </div>
+    </article>
+  </template>
+
+  <template id="reportRowTemplate">
+    <article class="intern-row report-row">
+      <div class="table-cell">
+        <span class="mobile-label">Date</span>
+        <strong class="report-date"></strong>
+      </div>
+      <div class="table-cell">
+        <span class="mobile-label">Total</span>
+        <span class="report-total"></span>
+      </div>
+      <div class="table-cell">
+        <span class="mobile-label">Present</span>
+        <span class="report-present"></span>
+      </div>
+      <div class="table-cell">
+        <span class="mobile-label">Late</span>
+        <span class="report-late"></span>
+      </div>
+      <div class="table-cell">
+        <span class="mobile-label">Leave</span>
+        <span class="report-leave"></span>
+      </div>
+      <div class="table-cell">
+        <span class="mobile-label">Half Day</span>
+        <span class="report-half-day"></span>
+      </div>
+      <div class="table-cell">
+        <span class="mobile-label">Absent</span>
+        <span class="report-absent"></span>
+      </div>
+    </article>
+  </template>
+
+  <template id="detailedReportRowTemplate">
+    <article class="intern-row detailed-report-row">
+      <div class="table-cell">
+        <span class="mobile-label">Name</span>
+        <strong class="detail-intern-name"></strong>
+      </div>
+      <div class="table-cell">
+        <span class="mobile-label">Department</span>
+        <span class="detail-team"></span>
+      </div>
+      <div class="table-cell">
+        <span class="mobile-label">Date</span>
+        <span class="detail-date"></span>
+      </div>
+      <div class="table-cell">
+        <span class="mobile-label">Morning</span>
+        <span class="detail-morning"></span>
+      </div>
+      <div class="table-cell">
+        <span class="mobile-label">Evening</span>
+        <span class="detail-evening"></span>
+      </div>
+      <div class="table-cell">
+        <span class="mobile-label">Final Status</span>
+        <span class="detail-final"></span>
+      </div>
+    </article>
+  </template>
+
+  <script src="app.js?v=20260608-halfday"></script>
+</body>
+</html>
