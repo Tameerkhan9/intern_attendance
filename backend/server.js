@@ -60,7 +60,7 @@ const ADMIN_USERNAME = "admin";
 const ADMIN_PASSWORD = "admin123";
 const PASSWORD_CODE_EMAIL = process.env.PASSWORD_CODE_EMAIL || "networkcorvitpwr@gmail.com";
 const GMAIL_SENDER = process.env.GMAIL_SENDER || "";
-const GMAIL_APP_PASSWORD = process.env.GMAIL_APP_PASSWORD || "";
+const GMAIL_APP_PASSWORD = (process.env.GMAIL_APP_PASSWORD || "").replace(/\s+/g, "");
 
 if (!DATABASE_URL) {
   fs.mkdirSync(DATA_DIR, { recursive: true });
@@ -140,7 +140,7 @@ const smtpCommand = async (socket, command, expectedCodes) => {
   const code = reply.slice(0, 3);
 
   if (!expectedCodes.includes(code)) {
-    throw new Error("Gmail rejected the verification email.");
+    throw new Error(`Gmail SMTP error ${code}: ${reply.trim()}`);
   }
 };
 
@@ -150,30 +150,35 @@ const sendRecoveryEmail = async (subject, body) => {
   }
 
   const socket = tls.connect(465, "smtp.gmail.com", { servername: "smtp.gmail.com" });
+  socket.setTimeout(20000);
   await new Promise((resolve, reject) => {
     socket.once("secureConnect", resolve);
     socket.once("error", reject);
+    socket.once("timeout", () => reject(new Error("Timed out connecting to Gmail SMTP.")));
   });
-  await smtpRead(socket);
+  try {
+    await smtpRead(socket);
 
-  const auth = Buffer.from(`\u0000${GMAIL_SENDER}\u0000${GMAIL_APP_PASSWORD}`).toString("base64");
-  const message = [
-    `From: Attendance Portal <${GMAIL_SENDER}>`,
-    `To: ${PASSWORD_CODE_EMAIL}`,
-    `Subject: ${subject}`,
-    "Content-Type: text/plain; charset=utf-8",
-    "",
-    body
-  ].join("\r\n");
+    const auth = Buffer.from(`\u0000${GMAIL_SENDER}\u0000${GMAIL_APP_PASSWORD}`).toString("base64");
+    const message = [
+      `From: Attendance Portal <${GMAIL_SENDER}>`,
+      `To: ${PASSWORD_CODE_EMAIL}`,
+      `Subject: ${subject}`,
+      "Content-Type: text/plain; charset=utf-8",
+      "",
+      body
+    ].join("\r\n");
 
-  await smtpCommand(socket, "EHLO attendance-portal.local", ["250"]);
-  await smtpCommand(socket, `AUTH PLAIN ${auth}`, ["235"]);
-  await smtpCommand(socket, `MAIL FROM:<${GMAIL_SENDER}>`, ["250"]);
-  await smtpCommand(socket, `RCPT TO:<${PASSWORD_CODE_EMAIL}>`, ["250", "251"]);
-  await smtpCommand(socket, "DATA", ["354"]);
-  await smtpCommand(socket, `${message}\r\n.`, ["250"]);
-  await smtpCommand(socket, "QUIT", ["221"]);
-  socket.end();
+    await smtpCommand(socket, "EHLO attendance-portal.local", ["250"]);
+    await smtpCommand(socket, `AUTH PLAIN ${auth}`, ["235"]);
+    await smtpCommand(socket, `MAIL FROM:<${GMAIL_SENDER}>`, ["250"]);
+    await smtpCommand(socket, `RCPT TO:<${PASSWORD_CODE_EMAIL}>`, ["250", "251"]);
+    await smtpCommand(socket, "DATA", ["354"]);
+    await smtpCommand(socket, `${message}\r\n.`, ["250"]);
+    await smtpCommand(socket, "QUIT", ["221"]);
+  } finally {
+    socket.end();
+  }
 };
 
 const sendPasswordCodeEmail = (code) => sendRecoveryEmail(

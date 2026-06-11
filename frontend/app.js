@@ -13,6 +13,8 @@ const elements = {
   passwordForm: document.querySelector("#passwordForm"),
   newPassword: document.querySelector("#newPassword"),
   passwordCode: document.querySelector("#passwordCode"),
+  passwordResetSubtitle: document.querySelector("#passwordResetSubtitle"),
+  recoveryEmailHint: document.querySelector("#recoveryEmailHint"),
   sendPasswordCodeButton: document.querySelector("#sendPasswordCodeButton"),
   passwordMessage: document.querySelector("#passwordMessage"),
   form: document.querySelector("#internForm"),
@@ -198,9 +200,27 @@ const setMessage = (element, message, type = "") => {
   }
 };
 
+const updateRecoveryEmailHint = () => {
+  if (!elements.recoveryEmailHint || !elements.passwordResetSubtitle) {
+    return;
+  }
+
+  if (!state.passwordResetConfigured) {
+    elements.passwordResetSubtitle.textContent = "Password reset is unavailable until Gmail sender settings are configured.";
+    elements.recoveryEmailHint.textContent = "";
+    return;
+  }
+
+  elements.passwordResetSubtitle.textContent = "Send a code to the configured recovery Gmail, then set a new password.";
+  elements.recoveryEmailHint.textContent = state.passwordResetEmail
+    ? `Reset codes are sent to ${state.passwordResetEmail}. Check Inbox or Spam.`
+    : "Reset codes are sent to the configured recovery Gmail inbox.";
+};
+
 const updatePasswordResetUi = () => {
   elements.sendPasswordCodeButton.disabled = !state.passwordResetConfigured;
   elements.passwordCode.disabled = !state.passwordResetConfigured;
+  updateRecoveryEmailHint();
 
   if (!state.passwordResetConfigured) {
     setMessage(
@@ -746,7 +766,7 @@ const sendPasswordCode = async () => {
       method: "POST",
       body: JSON.stringify({})
     });
-    setMessage(elements.passwordMessage, `Code sent to ${payload.email}.`, "success");
+    setMessage(elements.passwordMessage, `Code sent to ${payload.email}. Check Inbox or Spam.`, "success");
   } catch (error) {
     setMessage(elements.passwordMessage, error.message, "error");
   } finally {

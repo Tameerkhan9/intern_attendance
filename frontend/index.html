@@ -48,7 +48,7 @@
           <div>
             <p class="section-kicker">Account recovery</p>
             <h1>Reset password</h1>
-            <p class="panel-subtitle">Send a code to your Gmail, then set a new password.</p>
+            <p id="passwordResetSubtitle" class="panel-subtitle">Send a code to the configured recovery Gmail, then set a new password.</p>
           </div>
         </div>
         <form id="passwordForm" class="recovery-form">
@@ -70,6 +70,7 @@
             <span>Gmail code</span>
             <input id="passwordCode" type="text" inputmode="numeric" maxlength="6" placeholder="6-digit code" required>
           </label>
+          <p id="recoveryEmailHint" class="panel-subtitle"></p>
           <button id="sendPasswordCodeButton" class="secondary-button" type="button">Send reset code</button>
           <button type="submit">Reset password</button>
         </form>
