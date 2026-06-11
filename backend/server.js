@@ -41,12 +41,14 @@ const app = express();
 const PORT = process.env.PORT || 4000;
 const FRONTEND_DIR = path.join(ROOT_DIR, "frontend");
 const DATABASE_URL = process.env.DATABASE_URL || process.env.POSTGRES_URL || process.env.SUPABASE_DB_URL || "";
+const RUNTIME_PATHS = [__dirname, process.cwd()].filter(Boolean);
 const IS_SERVERLESS = Boolean(
   process.env.VERCEL
   || process.env.VERCEL_ENV
   || process.env.VERCEL_URL
   || process.env.AWS_REGION
   || process.env.LAMBDA_TASK_ROOT
+  || RUNTIME_PATHS.some((value) => value.includes("/var/task"))
 );
 const DATA_DIR = process.env.DATA_DIR || ((IS_SERVERLESS || DATABASE_URL)
   ? path.join("/tmp", "inter_attendance_data")
