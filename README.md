@@ -65,8 +65,8 @@ Hard refresh the browser with `Ctrl + F5` so the latest frontend script loads.
 - Create a `Web Service` on Render
 - Connect this GitHub repo
 - Render can use `render.yaml` automatically
-- The app stores SQLite data at `/var/data/attendance.db` on Render
-- Attach the persistent disk at `/var/data`
+- On Render free, the app stores SQLite data at `/tmp/inter_attendance_data/attendance.db`
+- This path is writable, but it is temporary and can be cleared on restart/redeploy
 
 ### Render settings
 
@@ -82,4 +82,5 @@ Hard refresh the browser with `Ctrl + F5` so the latest frontend script loads.
 
 ### Important
 
-- Use a paid Render plan that supports a persistent disk if you want SQLite data to survive redeploys and restarts.
+- On Render free, SQLite data is not permanent.
+- If you want data to survive redeploys and restarts reliably, use a paid plan with a persistent disk or move to Postgres.
