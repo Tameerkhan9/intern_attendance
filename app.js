@@ -213,7 +213,7 @@ const updateRecoveryEmailHint = () => {
 
   elements.passwordResetSubtitle.textContent = "Send a code to the configured recovery Gmail, then set a new password.";
   elements.recoveryEmailHint.textContent = state.passwordResetEmail
-    ? `Reset codes are sent to ${state.passwordResetEmail}. Check Inbox or Spam.`
+    ? "Reset codes are sent to the recovery inbox. Check Inbox or Spam."
     : "Reset codes are sent to the configured recovery Gmail inbox.";
 };
 
@@ -766,7 +766,7 @@ const sendPasswordCode = async () => {
       method: "POST",
       body: JSON.stringify({})
     });
-    setMessage(elements.passwordMessage, `Code sent to ${payload.email}. Check Inbox or Spam.`, "success");
+    setMessage(elements.passwordMessage, "Code sent. Check Inbox or Spam.", "success");
   } catch (error) {
     setMessage(elements.passwordMessage, error.message, "error");
   } finally {
